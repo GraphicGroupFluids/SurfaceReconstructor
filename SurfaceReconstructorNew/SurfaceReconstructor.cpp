@@ -1,5 +1,12 @@
 #include "SurfaceReconstructor.hpp"
 
+void SurfaceReconstructor::SetupSurfaceGrid() {
+	surfaceGrid.cellWidth = particleSpacing*0.5;
+	surfaceGrid.xmin = particleData.GetXMin()-padding;
+	surfaceGrid.xmax = particleData.GetXMax()+padding;
+	surfaceGrid.Init();
+}
+
 void SurfaceReconstructor::SetupZGrid(){
     zGrid.SetCellWidth(infectRadius);
     zGrid.SetXMin(particleData.GetXMin() - padding*2);
@@ -75,7 +82,7 @@ void SurfaceReconstructor::ComputeColorFieldAndMarkParticles(){
         else 
             surfaceParticleMark[i] = 0;
         
-        printf("%d %f %d\n",i, n_norm, numNeighbors);
+        //printf("%d %f %d\n",i, n_norm, numNeighbors);
     }
 }
 
@@ -201,6 +208,9 @@ void SurfaceReconstructor::ComputeScalarValues(){
 }
 
 void SurfaceReconstructor::Triangulate(){
+
+	printf("Triangulating..\n");
+
 	MarchingCube marchingCube;
 	marchingCube.surfaceGrid = & surfaceGrid;
 	marchingCube.SetCubeWidth(surfaceGrid.cellWidth);
